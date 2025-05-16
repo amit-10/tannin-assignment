@@ -12,6 +12,7 @@ import (
 
 	"github.com/deepmap/oapi-codegen/pkg/runtime"
 	"github.com/gorilla/mux"
+	"github.com/tanninio/home-assignment/internal/metrics"
 )
 
 const (
@@ -535,6 +536,8 @@ func HandlerWithOptions(si ServerInterface, options GorillaServerOptions) http.H
 	r.HandleFunc(options.BaseURL+"/pet/{petId}", wrapper.UpdatePetWithForm).Methods("POST")
 
 	r.HandleFunc(options.BaseURL+"/pet/{petId}/uploadImage", wrapper.UploadFile).Methods("POST")
+
+	r.HandleFunc("/metrics", metrics.MetricsHandler).Methods("GET")
 
 	return r
 }
