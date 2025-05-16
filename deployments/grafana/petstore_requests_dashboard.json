@@ -112,7 +112,7 @@
             "uid": "P1809F7CD0C75ACF3"
           },
           "editorMode": "builder",
-          "expr": "avg by(path) (rate(petstore_http_requests_total[$__rate_interval]))",
+          "expr": "avg by(path, method) (rate(petstore_http_requests_total[$__rate_interval]))",
           "legendFormat": "__auto",
           "range": true,
           "refId": "A"

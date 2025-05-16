@@ -4,11 +4,14 @@ import "sync"
 
 var (
 	mutex           sync.Mutex
-	requestCounters = make(map[string]int)
+	requestCounters = make(map[string]map[string]int)
 )
 
-func IncrementRequestCounter(path string) {
+func IncrementRequestCounter(path string, method string) {
 	mutex.Lock()
 	defer mutex.Unlock()
-	requestCounters[path]++
+	if _, ok := requestCounters[path]; !ok {
+		requestCounters[path] = make(map[string]int)
+	}
+	requestCounters[path][method]++
 }
