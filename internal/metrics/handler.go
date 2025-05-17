@@ -11,9 +11,7 @@ func MetricsHandler(w http.ResponseWriter, r *http.Request) {
 
 	w.Header().Set("Content-Type", "text/plain")
 
-	for path, methodMap := range requestCounters {
-		for method, count := range methodMap {
-			fmt.Fprintf(w, "petstore_http_requests_total{path=\"%s\", method=\"%s\"} %d\n", path, method, count)
-		}
+	for requestKey, count := range requestCounters {
+		fmt.Fprintf(w, "petstore_http_requests_total{path=\"%s\", method=\"%s\"} %d\n", requestKey.Path, requestKey.Method, count)
 	}
 }

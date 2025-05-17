@@ -2,16 +2,19 @@ package metrics
 
 import "sync"
 
+type RouteKey struct {
+	Path   string
+	Method string
+}
+
 var (
 	mutex           sync.Mutex
-	requestCounters = make(map[string]map[string]int)
+	requestCounters = make(map[RouteKey]int)
 )
 
 func IncrementRequestCounter(path string, method string) {
 	mutex.Lock()
 	defer mutex.Unlock()
-	if _, ok := requestCounters[path]; !ok {
-		requestCounters[path] = make(map[string]int)
-	}
-	requestCounters[path][method]++
+	routeKey := RouteKey{Path: path, Method: method}
+	requestCounters[routeKey]++
 }
