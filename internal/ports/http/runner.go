@@ -11,8 +11,7 @@ import (
 
 func HttpCreateServiceHandler(svc app.PetService, path string, configureRouters func(root, svcrouter *mux.Router)) http.Handler {
 	root := mux.NewRouter()
-
-	root.HandleFunc("/metrics", metrics.MetricsHandler).Methods("GET")
+	AddBaseRoutesHandlers(root)
 	svcrouter := root.PathPrefix(path).Subrouter()
 	configureRouters(root, svcrouter)
 	svcsrv := NewStrictHandlerWithOptions(NewHttpServer(svc), nil, StrictHTTPServerOptions{
@@ -29,4 +28,8 @@ func HttpServeHandler(addr string, handler http.Handler) {
 	if err != nil {
 		logrus.WithError(err).Panic("Unable to start HTTP server")
 	}
+}
+
+func AddBaseRoutesHandlers(root *mux.Router) {
+	root.HandleFunc("/metrics", metrics.MetricsHandler).Methods("GET")
 }
